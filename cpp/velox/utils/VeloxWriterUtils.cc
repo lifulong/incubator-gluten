@@ -49,6 +49,12 @@ std::unique_ptr<WriterOptions> makeParquetWriteOption(const std::unordered_map<s
   }
   auto writeOption = std::make_unique<WriterOptions>();
   writeOption->parquetWriteTimestampUnit = TimestampPrecision::kMicroseconds /*micro*/;
+  bool writeLegacyParquetFormat = false;
+  if (auto it = sparkConfs.find(kParquetStoreDecimalAsInteger); it != sparkConfs.end()) {
+    writeLegacyParquetFormat = boost::iequals(it->second, "true");
+  }
+  // Spark legacy Parquet uses FLBA-style decimals; Velox uses INT32/INT64 when writeLegacyParquetFormat is false.
+  writeOption->storeDecimalAsInteger = !writeLegacyParquetFormat;
   auto compressionCodec = CompressionKind::CompressionKind_SNAPPY;
   if (auto it = sparkConfs.find(kParquetCompressionCodec); it != sparkConfs.end()) {
     auto compressionCodecStr = it->second;

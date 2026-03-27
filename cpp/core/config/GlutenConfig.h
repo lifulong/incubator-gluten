@@ -70,6 +70,10 @@ const std::string kParquetWriterVersion = "parquet.writer.version";
 
 const std::string kParquetCompressionCodec = "spark.sql.parquet.compression.codec";
 
+/// Maps to Spark `spark.sql.parquet.writeLegacyFormat`; drives Velox
+/// `WriterOptions::storeDecimalAsInteger` (inverted: legacy true -> store as integer false).
+const std::string kParquetStoreDecimalAsInteger = "spark.sql.parquet.writeLegacyFormat";
+
 const std::string kColumnarToRowMemoryThreshold = "spark.gluten.sql.columnarToRowMemoryThreshold";
 
 const std::string kUGIUserName = "spark.gluten.ugi.username";
